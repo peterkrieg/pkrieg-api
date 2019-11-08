@@ -7,8 +7,12 @@ const projects = require('./projects.json');
 
 exports.handler = async (event, context) => {
 	console.log(JSON.stringify(event));
+	console.log(event);
 
-	const { searchTerm = '' } = event.queryStringParameters;
+	const { queryStringParameters } = event;
+
+	// searchTerm passed in as url param
+	const searchTerm = queryStringParameters && queryStringParameters.searchTerm;
 
 	const response = {
 		isBase64Encoded: false,
