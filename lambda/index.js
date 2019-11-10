@@ -6,6 +6,10 @@ const corsHeaders = {
 
 const allProjects = require('./projects.json');
 
+function wait (msToWait) {
+	return new Promise(resolve => setTimeout(resolve, msToWait));
+}
+
 exports.handler = async (event, context) => {
 	// num to return at a time
 	const numProjectsToReturn = 20;
@@ -39,9 +43,10 @@ exports.handler = async (event, context) => {
 		isBase64Encoded: false,
 		statusCode: 200,
 		headers: corsHeaders,
-		body: JSON.stringify(responseBody)
+		body: JSON.stringify(responseBody),
 	};
 
+	// await wait(1000);
 
 	return response;
 };
