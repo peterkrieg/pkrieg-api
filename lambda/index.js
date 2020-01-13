@@ -4,7 +4,9 @@ const corsHeaders = {
 	'Access-Control-Allow-Credentials': true, // Required for cookies, authorization headers with HTTPS
 };
 
-const allProjects = require('./projects.json');
+const allProjects = require('./projects.json')
+	// if want to test max of 50 projects
+	// .slice(0, 50);
 
 function wait (msToWait) {
 	return new Promise(resolve => setTimeout(resolve, msToWait));
@@ -23,6 +25,9 @@ exports.handler = async (event, context) => {
 	const filteredProjects = allProjects.filter(doesProjectMatchSearchTerm);
 	const projectsToReturn = filteredProjects.slice(offset, offset + numProjectsToReturn);
 
+	// number of all UNFILTERED projects that can be returned to user
+	const totalNumProjects = allProjects.length;
+
 
 	function doesProjectMatchSearchTerm (project) {
 		// this is terribly unoptimized, if no search term it stil loops through everything
@@ -32,10 +37,9 @@ exports.handler = async (event, context) => {
 	}
 
 	const responseBody = {
-		searchTerm,
-		offset,
+		totalNumProjects,
 		projects: projectsToReturn,
-		numProjects: filteredProjects.length,
+		// numProjects: filteredProjects.length,
 	};
 
 
@@ -46,7 +50,7 @@ exports.handler = async (event, context) => {
 		body: JSON.stringify(responseBody),
 	};
 
-	// await wait(1000);
+	await wait(400);
 
 	return response;
 };
